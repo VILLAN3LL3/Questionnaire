@@ -1,33 +1,45 @@
 ﻿@using Questionnaire.Data
+@inject QuestionService QuestionService
 
 <h4 class="mt-4">@Question.QuestionText</h4>
 
-@if (_selectedAnswer != null)
+
+@if (_vm == null)
 {
-    @if (_rightAnswerSelected)
-    {
-        <p class="pl-3">Your answer '@(_selectedAnswer.OptionText)' is correct.</p>
-    }
-    else
-    {
-        <p class="pl-3">
-            Your answer '@(_selectedAnswer.OptionText)' is wrong.<br />
-            Correct answer: '@(_correctAnswer.OptionText)'
-        </p>
-    }
+    <p><em>Loading...</em></p>
 }
 else
 {
-    <p class="pl-3">You haven't answered this question yet.</p>
+    @if (_vm.SelectedAnswer != null)
+    {
+        @if (_vm.RightAnswerSelected)
+        {
+            <p class="pl-3">Your answer '@(_vm.SelectedAnswer.OptionText)' is correct.</p>
+        }
+        else
+        {
+            <p class="pl-3">
+                Your answer '@(_vm.SelectedAnswer.OptionText)' is wrong.<br />
+                Correct answer: '@(_vm.CorrectAnswer.OptionText)'
+            </p>
+        }
+    }
+    else
+    {
+        <p class="pl-3">You haven't answered this question yet.</p>
+    }
 }
+
 
 
 
 @code {
     [Parameter]
     public Question Question { get; set; }
+    private QuestionEvaluationVM _vm;
 
-    private AnswerOption _selectedAnswer => Question.AnswerOptions.FirstOrDefault(o => o.IsSelected);
-    private bool _rightAnswerSelected => _selectedAnswer != null ? _selectedAnswer.IsCorrectAnswer : false;
-    private AnswerOption _correctAnswer => Question.AnswerOptions.First(o => o.IsCorrectAnswer);
+    protected override void OnInitialized()
+    {
+        _vm = QuestionService.EvaluateQuestion(Question);
+    }
 }

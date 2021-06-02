@@ -28,7 +28,9 @@
         else
         {
             <h1>Your score</h1>
-            <p>@_correctQuestionCount out of @_questions?.Count questions answered correctly @_correctPercentage</p>
+            <div class="alert @GetAlertClass()" role="alert">
+                @_correctQuestionCount out of @_questions?.Count questions answered correctly (@(_correctQuestionPercentage)%)
+            </div>
             <div style="height: 70vh; overflow-y: scroll;">
                 @foreach (var question in _questions)
                 {
@@ -43,18 +45,28 @@
 @code {
     private IList<Question> _questions;
     private bool _submitted;
-    private int _correctQuestionCount => _questions?.SelectMany(q => q.AnswerOptions).Count(a => a.IsCorrectAnswer && a.IsSelected) ?? 0;
-    private string _correctPercentage => _questions != null ? $"({( _correctQuestionCount * 100 / _questions.Count * 100 ) / 100}%)" : "";
+    private int _correctQuestionCount = 0;
+    private int _correctQuestionPercentage = 0;
 
     protected override async Task OnInitializedAsync()
     {
         _questions = await QuestionService.GetQuestionsAsync();
     }
-}
 
-@functions {
+    private string GetAlertClass()
+    {
+        return _correctQuestionPercentage switch
+        {
+            100 => "alert-success",
+            0 => "alert-danger",
+            _ => "alert-primary"
+        };
+    }
+
     private void Submit()
     {
         _submitted = true;
+        _correctQuestionCount = QuestionService.GetCorrectQuestionCount(_questions);
+        _correctQuestionPercentage = QuestionService.GetCorrectQuestionPercentage(_correctQuestionCount, _questions.Count);
     }
 }

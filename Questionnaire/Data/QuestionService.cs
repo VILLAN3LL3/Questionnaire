@@ -1,56 +1,26 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Questionnaire.Data
 {
     public class QuestionService
     {
-        private readonly IList<Question> _questions = new List<Question>
-            {
-                new Question
-                {
-                    QuestionText = "Which of these animals is a mammal?",
-                    AnswerOptions = new List<AnswerOption>
-                    {
-                        new AnswerOption { OptionText = "Ant" },
-                        new AnswerOption { OptionText = "Bee" },
-                        new AnswerOption { OptionText = "Cat", IsCorrectAnswer = true },
-                    }
-                },
-                new Question
-                {
-                    QuestionText = "What is the sum of 2+3?",
-                    AnswerOptions = new List<AnswerOption>
-                    {
-                        new AnswerOption { OptionText = "2" },
-                        new AnswerOption { OptionText = "5", IsCorrectAnswer = true },
-                        new AnswerOption { OptionText = "6" }
-                    }
-                },
-                new Question
-                {
-                    QuestionText = "What is the answer to the ultimate question of life, the universe and everything?",
-                    AnswerOptions = new List<AnswerOption>
-                    {
-                        new AnswerOption { OptionText = "42", IsCorrectAnswer = true },
-                        new AnswerOption { OptionText = "Are you kiddin' me?" },
-                        new AnswerOption { OptionText = "There is no such an answer"}
-                    }
-                },
-                new Question
-                {
-                    QuestionText = "Which Howarts House would you be sorted to?",
-                    AnswerOptions = new List<AnswerOption>
-                    {
-                        new AnswerOption { OptionText = "Gryffindor", IsCorrectAnswer = true },
-                        new AnswerOption { OptionText = "Hufflepuff", IsCorrectAnswer = true },
-                        new AnswerOption { OptionText = "Ravenclaw", IsCorrectAnswer = true },
-                        new AnswerOption { OptionText = "Slytherin", IsCorrectAnswer = true }
-                    }
-                }
-            };
+        private readonly IList<Question> _questions;
+        private readonly IQuestionnaireCreator _questionnaireCreator;
+        private readonly IFileProvider _fileProvider;
 
-        public Task<IList<Question>> GetQuestionsAsync() => Task.FromResult(_questions);
+        public QuestionService(IFileProvider fileProvider, IQuestionnaireCreator questionnaireCreator)
+        {
+            _questionnaireCreator = questionnaireCreator;
+            _fileProvider = fileProvider;
+        }
+
+        public Task<IList<Question>> GetQuestionsAsync()
+        {
+            string[] lines = _fileProvider.ReadFile("questionnaire.txt");
+            return Task.FromResult(_questionnaireCreator.CreateQuestionnaire(lines));
+        }
 
         public void UpdateQuestion(Question questionToUpdate)
         {
@@ -62,5 +32,20 @@ namespace Questionnaire.Data
                 }
             }
         }
+
+        public QuestionEvaluationVM EvaluateQuestion(Question question)
+        {
+            var vm = new QuestionEvaluationVM
+            {
+                SelectedAnswer = question.AnswerOptions.FirstOrDefault(o => o.IsSelected),
+                CorrectAnswer = question.AnswerOptions.First(o => o.IsCorrectAnswer)
+            };
+            vm.RightAnswerSelected = vm.SelectedAnswer != null ? vm.SelectedAnswer.IsCorrectAnswer : false;
+            return vm;
+        }
+
+        public int GetCorrectQuestionCount(IList<Question> questions) => questions?.SelectMany(q => q.AnswerOptions).Count(a => a.IsCorrectAnswer && a.IsSelected) ?? 0;
+
+        public int GetCorrectQuestionPercentage(int correctQuestionCount, int questionCount) => ( correctQuestionCount * 100 / questionCount * 100 ) / 100;
     }
 }

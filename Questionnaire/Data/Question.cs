@@ -4,7 +4,7 @@ namespace Questionnaire.Data
 {
     public class Question
     {
-        public IEnumerable<AnswerOption> AnswerOptions { get; set; }
+        public IList<AnswerOption> AnswerOptions { get; set; } = new List<AnswerOption>();
         public string QuestionText { get; set; }
     }
 }

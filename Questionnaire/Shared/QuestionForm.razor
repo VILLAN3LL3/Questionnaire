@@ -1,4 +1,5 @@
 ﻿@using Questionnaire.Data
+@inject QuestionService QuestionService
 
 <h4 class="mt-4">@Question.QuestionText</h4>
 
@@ -36,5 +37,6 @@
         }
         var selectedOption = Question.AnswerOptions.First(o => o.OptionText.Equals(value));
         selectedOption.IsSelected = true;
+        QuestionService.UpdateQuestion(Question);
     }
 }
