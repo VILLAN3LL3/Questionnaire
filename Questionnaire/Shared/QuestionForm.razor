@@ -4,12 +4,23 @@
 <h4 class="mt-4">@Question.QuestionText</h4>
 
 <EditForm Model="this">
-    <InputRadioGroup @bind-Value="SelectedOption">
+    @if (Question.IsMultiSelect)
+    {
         @foreach (var option in Question.AnswerOptions)
         {
-            <InputRadio Value="option.OptionText" /> <span class="ml-2">@option.OptionText</span> <br />
+            <InputCheckbox @bind-Value="option.IsSelected"></InputCheckbox> <span class="ml-2">@option.OptionText</span> <br />
         }
-    </InputRadioGroup>
+    }
+    else
+    {
+        <InputRadioGroup @bind-Value="SelectedOption">
+            @foreach (var option in Question.AnswerOptions)
+                {
+                <InputRadio Value="option.OptionText" /> <span class="ml-2">@option.OptionText</span> <br />
+                }
+        </InputRadioGroup>
+    }
+
 </EditForm>
 
 @code {

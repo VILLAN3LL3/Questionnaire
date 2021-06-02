@@ -21,6 +21,7 @@ namespace Questionnaire.Tests.Data
                 "Ant",
                 "Bee",
                 "*Cat",
+                "*Dog",
                 "?What is the sum of 2+3",
                 "2",
                 "*5",

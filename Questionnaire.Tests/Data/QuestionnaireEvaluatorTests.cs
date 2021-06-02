@@ -16,15 +16,33 @@ namespace Questionnaire.Tests.Data
             {
                 yield return new TestCaseData(TestData.FirstQuestionWithWrongAnswer, new EvaluatedQuestion
                 {
-                    CorrectAnswer = "Cat",
-                    SelectedAnswer = "Ant",
-                    RightAnswerSelected = false
+                    CorrectAnswer = "Cat, Dog",
+                    SelectedAnswers = "Ant",
+                    RightAnswersSelected = false
                 });
                 yield return new TestCaseData(TestData.LastQuestionWithCorrectAnswer, new EvaluatedQuestion
                 {
-                    CorrectAnswer = "Gryffindor, Hufflepuff, Ravenclaw, Slytherin",
-                    SelectedAnswer = "Gryffindor",
-                    RightAnswerSelected = true
+                    CorrectAnswer = "Slytherin",
+                    SelectedAnswers = "Slytherin",
+                    RightAnswersSelected = true
+                });
+                yield return new TestCaseData(TestData.FirstQuestionWithCorrectAnswer, new EvaluatedQuestion
+                {
+                    CorrectAnswer = "Cat, Dog",
+                    SelectedAnswers = "Cat, Dog",
+                    RightAnswersSelected = true
+                });
+                yield return new TestCaseData(TestData.FirstQuestionWithOneWrongAndOneCorrectAnswer, new EvaluatedQuestion
+                {
+                    CorrectAnswer = "Cat, Dog",
+                    SelectedAnswers = "Ant, Dog",
+                    RightAnswersSelected = false
+                });
+                yield return new TestCaseData(TestData.FirstQuestionWithOneCorrectAnswer, new EvaluatedQuestion
+                {
+                    CorrectAnswer = "Cat, Dog",
+                    SelectedAnswers = "Dog",
+                    RightAnswersSelected = false
                 });
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Questionnaire.Data;
 
 namespace Questionnaire.Tests
@@ -39,6 +40,7 @@ namespace Questionnaire.Tests
                         new AnswerOption { OptionText = "Ant" },
                         new AnswerOption { OptionText = "Bee" },
                         new AnswerOption { OptionText = "Cat", IsCorrectAnswer = true },
+                        new AnswerOption { OptionText = "Dog", IsCorrectAnswer = true },
                     }
         };
 
@@ -47,9 +49,9 @@ namespace Questionnaire.Tests
             QuestionText = "Which Hogwarts House would you be sorted to?",
             AnswerOptions = new List<AnswerOption>
                     {
-                        new AnswerOption { OptionText = "Gryffindor", IsCorrectAnswer = true },
-                        new AnswerOption { OptionText = "Hufflepuff", IsCorrectAnswer = true },
-                        new AnswerOption { OptionText = "Ravenclaw", IsCorrectAnswer = true },
+                        new AnswerOption { OptionText = "Gryffindor", IsCorrectAnswer = false },
+                        new AnswerOption { OptionText = "Hufflepuff", IsCorrectAnswer = false },
+                        new AnswerOption { OptionText = "Ravenclaw", IsCorrectAnswer = false },
                         new AnswerOption { OptionText = "Slytherin", IsCorrectAnswer = true }
                     }
         };
@@ -64,12 +66,44 @@ namespace Questionnaire.Tests
             }
         }
 
+        public static Question FirstQuestionWithCorrectAnswer
+        {
+            get
+            {
+                Question firstQuestion = FirstQuestion;
+                firstQuestion.AnswerOptions[2].IsSelected = true;
+                firstQuestion.AnswerOptions[3].IsSelected = true;
+                return firstQuestion;
+            }
+        }
+
+        public static Question FirstQuestionWithOneWrongAndOneCorrectAnswer
+        {
+            get
+            {
+                Question firstQuestion = FirstQuestion;
+                firstQuestion.AnswerOptions[0].IsSelected = true;
+                firstQuestion.AnswerOptions[3].IsSelected = true;
+                return firstQuestion;
+            }
+        }
+
+        public static Question FirstQuestionWithOneCorrectAnswer
+        {
+            get
+            {
+                Question firstQuestion = FirstQuestion;
+                firstQuestion.AnswerOptions[3].IsSelected = true;
+                return firstQuestion;
+            }
+        }
+
         public static Question LastQuestionWithCorrectAnswer
         {
             get
             {
                 Question lastQuestion = LastQuestion;
-                lastQuestion.AnswerOptions[0].IsSelected = true;
+                lastQuestion.AnswerOptions.Last().IsSelected = true;
                 return lastQuestion;
             }
         }
