@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
 using Questionnaire.Data;
@@ -124,6 +125,17 @@ namespace Questionnaire.Tests.Data
             questionInteractor.UpdateQuestion(question, "Ant");
 
             question.Should().BeEquivalentTo(TestData.FirstQuestionWithWrongAnswer);
+        }
+
+        [Test]
+        public void Should_Find_Questionnaires_In_Directory()
+        {
+            QuestionInteractor questionInteractor = CreateQuestionInteractor();
+
+            IEnumerable<string> result = questionInteractor.GetQuestionnaires(TestContext.CurrentContext.TestDirectory);
+
+            result.Count().Should().Be(3);
+            result.Last().Should().EndWith("testquestionnaire.txt");
         }
     }
 }

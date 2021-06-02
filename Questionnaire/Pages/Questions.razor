@@ -41,14 +41,18 @@
 
     </div>
 </div>
+@if (_showDialog)
+{
+    <QuestionnaireSelectModal OnClose="@OnDialogClose"></QuestionnaireSelectModal>
+
+}
 
 @code {
     private IList<Question> _questions;
     private bool _submitted;
     private int _correctQuestionCount = 0;
     private int _correctQuestionPercentage = 0;
-
-    protected override void OnInitialized() { _questions = Interactor.GetQuestions("questionnaire.txt"); }
+    private bool _showDialog = true;
 
     private string GetAlertClass()
     {
@@ -65,5 +69,12 @@
         _submitted = true;
         _correctQuestionCount = Interactor.GetCorrectQuestionCount(_questions);
         _correctQuestionPercentage = Interactor.GetCorrectQuestionPercentage(_correctQuestionCount, _questions.Count);
+    }
+
+    private Task OnDialogClose(string selectedQuestionnaire)
+    {
+        _showDialog = false;
+        _questions = Interactor.GetQuestions(selectedQuestionnaire);
+        return Task.CompletedTask;
     }
 }

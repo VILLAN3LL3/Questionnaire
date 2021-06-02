@@ -1,0 +1,50 @@
+﻿@using Questionnaire.Data
+@inject QuestionInteractor Interactor
+
+<div class="modal fade show" id="myModal" style="display:block; background-color: rgba(10,10,10,.8);" aria-modal="true" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Please select one questionnaire first</h4>
+            </div>
+            <div class="modal-body" style="height: 70vh; overflow-y: scroll">
+                @if (_questionnairePaths == null)
+                {
+                    <p><em>Loading...</em></p>
+                }
+                else
+                {
+                    <EditForm Model="this">
+                        <InputRadioGroup @bind-Value="_selectedQuestionnaire">
+                            @foreach (var path in _questionnairePaths)
+                                {
+                                <InputRadio Value="path" /> <span class="ml-2">@path</span> <br />
+                                }
+                        </InputRadioGroup>
+                    </EditForm>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" disabled="@(_selectedQuestionnaire == null)" @onclick=@Submit>Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private IEnumerable<string> _questionnairePaths;
+    private string _selectedQuestionnaire;
+
+    protected override void OnInitialized()
+    {
+        _questionnairePaths = Interactor.GetQuestionnaires(AppContext.BaseDirectory);
+    }
+
+    [Parameter]
+    public EventCallback<string> OnClose { get; set; }
+
+    private Task Submit()
+    {
+        return OnClose.InvokeAsync(_selectedQuestionnaire);
+    }
+}
