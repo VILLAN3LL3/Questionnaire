@@ -1,0 +1,33 @@
+﻿@using Questionnaire.Data
+
+<h4 class="mt-4">@Question.QuestionText</h4>
+
+@if (_selectedAnswer != null)
+{
+    @if (_rightAnswerSelected)
+    {
+        <p class="pl-3">Your answer '@(_selectedAnswer.OptionText)' is correct.</p>
+    }
+    else
+    {
+        <p class="pl-3">
+            Your answer '@(_selectedAnswer.OptionText)' is wrong.<br />
+            Correct answer: '@(_correctAnswer.OptionText)'
+        </p>
+    }
+}
+else
+{
+    <p class="pl-3">You haven't answered this question yet.</p>
+}
+
+
+
+@code {
+    [Parameter]
+    public Question Question { get; set; }
+
+    private AnswerOption _selectedAnswer => Question.AnswerOptions.FirstOrDefault(o => o.IsSelected);
+    private bool _rightAnswerSelected => _selectedAnswer != null ? _selectedAnswer.IsCorrectAnswer : false;
+    private AnswerOption _correctAnswer => Question.AnswerOptions.First(o => o.IsCorrectAnswer);
+}

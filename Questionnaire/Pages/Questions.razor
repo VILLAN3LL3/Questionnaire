@@ -1,46 +1,60 @@
-﻿@page "/questions"
+﻿@page "/"
 
 @using Questionnaire.Data
-@inject WeatherForecastService ForecastService
+@inject QuestionService QuestionService
+@inject NavigationManager UriHelper
 
-<h1>Questionnaire</h1>
+<div class="container-fluid">
+    <div class="card p-3 m-auto" style="max-width: 500px">
+        @if (!_submitted)
+        {
+            <h1>Questionnaire</h1>
 
-<p>This component demonstrates fetching data from a service.</p>
-
-@if (forecasts == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var forecast in forecasts)
+            @if (_questions == null)
             {
-                <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
-                </tr>
+                <p><em>Loading...</em></p>
             }
-        </tbody>
-    </table>
-}
+            else
+            {
+                <div style="height: 70vh; overflow-y: scroll;">
+                    @foreach (var question in _questions)
+                    {
+                        <QuestionForm Question="@question"></QuestionForm>
+                    }
+                </div>
+                <button class="btn btn-primary mt-4" @onclick="Submit">Show my score...</button>
+            }
+        }
+        else
+        {
+            <h1>Your score</h1>
+            <p>@_correctQuestionCount out of @_questions?.Count questions answered correctly @_correctPercentage</p>
+            <div style="height: 70vh; overflow-y: scroll;">
+                @foreach (var question in _questions)
+                {
+                    <QuestionEvaluation Question="@question"></QuestionEvaluation>
+                }
+            </div>
+        }
+
+    </div>
+</div>
 
 @code {
-    private WeatherForecast[] forecasts;
+    private IList<Question> _questions;
+    private bool _submitted;
+    private int _correctQuestionCount => _questions?.SelectMany(q => q.AnswerOptions).Count(a => a.IsCorrectAnswer && a.IsSelected) ?? 0;
+    private string _correctPercentage => _questions != null ? $"({( _correctQuestionCount * 100 / _questions.Count * 100 ) / 100}%)" : "";
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+        _questions = await QuestionService.GetQuestionsAsync();
+    }
+}
+
+@functions {
+    private void Submit()
+    {
+        _submitted = true;
     }
 }

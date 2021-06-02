@@ -1,0 +1,40 @@
+﻿@using Questionnaire.Data
+
+<h4 class="mt-4">@Question.QuestionText</h4>
+
+<EditForm Model="this">
+    <InputRadioGroup @bind-Value="SelectedOption">
+        @foreach (var option in Question.AnswerOptions)
+        {
+            <InputRadio Value="option.OptionText" /> <span class="ml-2">@option.OptionText</span> <br />
+        }
+    </InputRadioGroup>
+</EditForm>
+
+@code {
+    [Parameter]
+    public Question Question { get; set; }
+
+    private string _selectedOption;
+    public string SelectedOption
+    {
+        get => _selectedOption;
+        set
+        {
+            _selectedOption = value;
+            OnSelectionChanged(value);
+        }
+    }
+}
+
+@functions {
+    private void OnSelectionChanged(string value)
+    {
+        foreach (var answerOption in Question.AnswerOptions)
+        {
+            answerOption.IsSelected = false;
+        }
+        var selectedOption = Question.AnswerOptions.First(o => o.OptionText.Equals(value));
+        selectedOption.IsSelected = true;
+    }
+}
