@@ -1,7 +1,7 @@
 ﻿@page "/"
 
 @using Questionnaire.Data
-@inject QuestionService QuestionService
+@inject QuestionInteractor Interactor
 @inject NavigationManager UriHelper
 
 <div class="container-fluid">
@@ -48,10 +48,7 @@
     private int _correctQuestionCount = 0;
     private int _correctQuestionPercentage = 0;
 
-    protected override async Task OnInitializedAsync()
-    {
-        _questions = await QuestionService.GetQuestionsAsync();
-    }
+    protected override void OnInitialized() { _questions = Interactor.GetQuestions("questionnaire.txt"); }
 
     private string GetAlertClass()
     {
@@ -66,7 +63,7 @@
     private void Submit()
     {
         _submitted = true;
-        _correctQuestionCount = QuestionService.GetCorrectQuestionCount(_questions);
-        _correctQuestionPercentage = QuestionService.GetCorrectQuestionPercentage(_correctQuestionCount, _questions.Count);
+        _correctQuestionCount = Interactor.GetCorrectQuestionCount(_questions);
+        _correctQuestionPercentage = Interactor.GetCorrectQuestionPercentage(_correctQuestionCount, _questions.Count);
     }
 }

@@ -1,23 +1,13 @@
 ﻿using System.Collections.Generic;
-using NUnit.Framework;
 using Questionnaire.Data;
 
 namespace Questionnaire.Tests
 {
-    public class Tests
+    public static class TestData
     {
-        private readonly IList<Question> _questions = new List<Question>
+        public static IList<Question> Questions => new List<Question>
             {
-                new Question
-                {
-                    QuestionText = "Which of these animals is a mammal?",
-                    AnswerOptions = new List<AnswerOption>
-                    {
-                        new AnswerOption { OptionText = "Ant" },
-                        new AnswerOption { OptionText = "Bee" },
-                        new AnswerOption { OptionText = "Cat", IsCorrectAnswer = true },
-                    }
-                },
+                FirstQuestion,
                 new Question
                 {
                     QuestionText = "What is the sum of 2+3?",
@@ -38,28 +28,50 @@ namespace Questionnaire.Tests
                         new AnswerOption { OptionText = "There is no such an answer"}
                     }
                 },
-                new Question
-                {
-                    QuestionText = "Which Howarts House would you be sorted to?",
-                    AnswerOptions = new List<AnswerOption>
+                LastQuestion
+            };
+
+        private static Question FirstQuestion => new()
+        {
+            QuestionText = "Which of these animals is a mammal?",
+            AnswerOptions = new List<AnswerOption>
+                    {
+                        new AnswerOption { OptionText = "Ant" },
+                        new AnswerOption { OptionText = "Bee" },
+                        new AnswerOption { OptionText = "Cat", IsCorrectAnswer = true },
+                    }
+        };
+
+        private static Question LastQuestion => new()
+        {
+            QuestionText = "Which Hogwarts House would you be sorted to?",
+            AnswerOptions = new List<AnswerOption>
                     {
                         new AnswerOption { OptionText = "Gryffindor", IsCorrectAnswer = true },
                         new AnswerOption { OptionText = "Hufflepuff", IsCorrectAnswer = true },
                         new AnswerOption { OptionText = "Ravenclaw", IsCorrectAnswer = true },
                         new AnswerOption { OptionText = "Slytherin", IsCorrectAnswer = true }
                     }
-                }
-            };
+        };
 
-        [SetUp]
-        public void Setup()
+        public static Question FirstQuestionWithWrongAnswer
         {
+            get
+            {
+                Question firstQuestion = FirstQuestion;
+                firstQuestion.AnswerOptions[0].IsSelected = true;
+                return firstQuestion;
+            }
         }
 
-        [Test]
-        public void Test1()
+        public static Question LastQuestionWithCorrectAnswer
         {
-            Assert.Pass();
+            get
+            {
+                Question lastQuestion = LastQuestion;
+                lastQuestion.AnswerOptions[0].IsSelected = true;
+                return lastQuestion;
+            }
         }
     }
 }

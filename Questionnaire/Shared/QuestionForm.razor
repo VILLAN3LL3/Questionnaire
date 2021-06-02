@@ -1,5 +1,5 @@
 ﻿@using Questionnaire.Data
-@inject QuestionService QuestionService
+@inject QuestionInteractor Interactor
 
 <h4 class="mt-4">@Question.QuestionText</h4>
 
@@ -26,17 +26,9 @@
             OnSelectionChanged(value);
         }
     }
-}
 
-@functions {
     private void OnSelectionChanged(string value)
     {
-        foreach (var answerOption in Question.AnswerOptions)
-        {
-            answerOption.IsSelected = false;
-        }
-        var selectedOption = Question.AnswerOptions.First(o => o.OptionText.Equals(value));
-        selectedOption.IsSelected = true;
-        QuestionService.UpdateQuestion(Question);
+        Interactor.UpdateQuestion(Question, value);
     }
 }

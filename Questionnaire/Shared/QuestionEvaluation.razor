@@ -1,5 +1,5 @@
 ﻿@using Questionnaire.Data
-@inject QuestionService QuestionService
+@inject QuestionInteractor Interactor
 
 <h4 class="mt-4">@Question.QuestionText</h4>
 
@@ -14,13 +14,13 @@ else
     {
         @if (_vm.RightAnswerSelected)
         {
-            <p class="pl-3">Your answer '@(_vm.SelectedAnswer.OptionText)' is correct.</p>
+            <p class="pl-3">Your answer '@(_vm.SelectedAnswer)' is correct.</p>
         }
         else
         {
             <p class="pl-3">
-                Your answer '@(_vm.SelectedAnswer.OptionText)' is wrong.<br />
-                Correct answer: '@(_vm.CorrectAnswer.OptionText)'
+                Your answer '@(_vm.SelectedAnswer)' is wrong.<br />
+                Correct answer: '@(_vm.CorrectAnswer)'
             </p>
         }
     }
@@ -36,10 +36,10 @@ else
 @code {
     [Parameter]
     public Question Question { get; set; }
-    private QuestionEvaluationVM _vm;
+    private EvaluatedQuestion _vm;
 
     protected override void OnInitialized()
     {
-        _vm = QuestionService.EvaluateQuestion(Question);
+        _vm = Interactor.EvaluateQuestion(Question);
     }
 }
