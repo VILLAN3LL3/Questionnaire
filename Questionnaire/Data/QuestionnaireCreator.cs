@@ -40,7 +40,15 @@ namespace Questionnaire.Data
 
         private void AddDontKnowAnswerOption(Question question)
         {
-            question?.AnswerOptions.Add(CreateAnswerOption("Don't know"));
+            if (question is null)
+            {
+                return;
+            }
+
+            if (question.Type != QuestionType.TextInput)
+            {
+                question.AnswerOptions.Add(CreateAnswerOption("Don't know"));
+            }
         }
     }
 }

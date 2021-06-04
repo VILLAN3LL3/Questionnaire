@@ -25,12 +25,19 @@ namespace Questionnaire.Data
             {
                 answerOption.IsSelected = false;
             }
-            AnswerOption selectedOption = question.AnswerOptions.First(o => o.OptionText.Equals(selectedValue));
-            selectedOption.IsSelected = true;
+            AnswerOption selectedOption = question.AnswerOptions.FirstOrDefault(o => o.OptionText.Equals(selectedValue));
+            if (selectedOption is null)
+            {
+                question.AnswerOptions.Add(new AnswerOption { OptionText = selectedValue, IsSelected = true });
+            }
+            else
+            {
+                selectedOption.IsSelected = true;
+            }
         }
 
         public int GetCorrectQuestionCount(IList<Question> questions) => questions?.Count(q => q.AnswerOptions.Where(o => o.IsCorrectAnswer).All(o => o.IsSelected)) ?? 0;
 
-        public int GetCorrectQuestionPercentage(int correctQuestionCount, int questionCount) => questionCount == 0 ? 0 : Math.Min(( correctQuestionCount * 100 / questionCount * 100 ) / 100, 100);
+        public int GetCorrectQuestionPercentage(int correctQuestionCount, int questionCount) => questionCount == 0 ? 0 : Math.Min((correctQuestionCount * 100 / questionCount * 100) / 100, 100);
     }
 }

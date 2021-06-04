@@ -50,3 +50,13 @@ a, .btn-link {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+@media(min-width: 576px) {
+    .modal-dialog {
+        max-width: 80% !important;
+    }
+}
+
+input:not([type=radio]):not([type=checkbox]) {
+    width: 95%;
+}

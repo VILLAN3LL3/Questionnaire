@@ -10,28 +10,18 @@
 }
 else
 {
-    @if (_vm.SelectedAnswers.Any())
+    @if (_vm.RightAnswersSelected)
     {
-        @if (_vm.RightAnswersSelected)
-        {
-            <p class="pl-3">Your answer '@(_vm.SelectedAnswers)' is correct.</p>
-        }
-        else
-        {
-            <p class="pl-3">
-                Your answer '@(_vm.SelectedAnswers)' is wrong.<br />
-                Correct answer: '@(_vm.CorrectAnswer)'
-            </p>
-        }
+        <p class="pl-3">Your answer '@(_vm.SelectedAnswers)' is correct.</p>
     }
     else
     {
-        <p class="pl-3">You haven't answered this question yet.</p>
+        <p class="pl-3">
+            Your answer '@(_vm.SelectedAnswers)' is wrong.<br />
+            Correct answer: '@(_vm.CorrectAnswer)'
+        </p>
     }
 }
-
-
-
 
 @code {
     [Parameter]

@@ -8,6 +8,20 @@ namespace Questionnaire.Data
         public IList<AnswerOption> AnswerOptions { get; set; } = new List<AnswerOption>();
         public string QuestionText { get; set; }
 
-        public bool IsMultiSelect => AnswerOptions.Count(o => o.IsCorrectAnswer) > 1;
+        public QuestionType Type
+        {
+            get
+            {
+                if (AnswerOptions.Count == 1)
+                {
+                    return QuestionType.TextInput;
+                }
+                if (AnswerOptions.Count(o => o.IsCorrectAnswer) > 1)
+                {
+                    return QuestionType.MultiSelect;
+                }
+                return QuestionType.SingleSelect;
+            }
+        }
     }
 }

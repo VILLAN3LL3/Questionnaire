@@ -10,45 +10,8 @@ namespace Questionnaire.Tests.Data
     {
         private QuestionnaireEvaluator CreateQuestionnaireEvaluator() => new();
 
-        private static IEnumerable<TestCaseData> EvaluateQuestionTestData
-        {
-            get
-            {
-                yield return new TestCaseData(TestData.FirstQuestionWithWrongAnswer, new EvaluatedQuestion
-                {
-                    CorrectAnswer = "Cat, Dog",
-                    SelectedAnswers = "Ant",
-                    RightAnswersSelected = false
-                });
-                yield return new TestCaseData(TestData.LastQuestionWithCorrectAnswer, new EvaluatedQuestion
-                {
-                    CorrectAnswer = "Slytherin",
-                    SelectedAnswers = "Slytherin",
-                    RightAnswersSelected = true
-                });
-                yield return new TestCaseData(TestData.FirstQuestionWithCorrectAnswer, new EvaluatedQuestion
-                {
-                    CorrectAnswer = "Cat, Dog",
-                    SelectedAnswers = "Cat, Dog",
-                    RightAnswersSelected = true
-                });
-                yield return new TestCaseData(TestData.FirstQuestionWithOneWrongAndOneCorrectAnswer, new EvaluatedQuestion
-                {
-                    CorrectAnswer = "Cat, Dog",
-                    SelectedAnswers = "Ant, Dog",
-                    RightAnswersSelected = false
-                });
-                yield return new TestCaseData(TestData.FirstQuestionWithOneCorrectAnswer, new EvaluatedQuestion
-                {
-                    CorrectAnswer = "Cat, Dog",
-                    SelectedAnswers = "Dog",
-                    RightAnswersSelected = false
-                });
-            }
-        }
-
         [Test]
-        [TestCaseSource(nameof(EvaluateQuestionTestData))]
+        [TestCaseSource(typeof(TestData), nameof(TestData.EvaluatedQuestionTestData))]
         public void Should_EvaluateQuestion(Question question, EvaluatedQuestion expectedResult)
         {
             QuestionnaireEvaluator questionnaireEvaluator = CreateQuestionnaireEvaluator();
@@ -59,18 +22,8 @@ namespace Questionnaire.Tests.Data
             result.Should().BeEquivalentTo(expectedResult);
         }
 
-        private static IEnumerable<TestCaseData> QuestionCountTestData
-        {
-            get
-            {
-                yield return new TestCaseData(new List<Question> { TestData.FirstQuestionWithWrongAnswer, TestData.LastQuestionWithCorrectAnswer }, 1);
-                yield return new TestCaseData(null, 0);
-                yield return new TestCaseData(new List<Question>(), 0);
-            }
-        }
-
         [Test]
-        [TestCaseSource(nameof(QuestionCountTestData))]
+        [TestCaseSource(typeof(TestData), nameof(TestData.QuestionCountTestData))]
         public void Should_GetCorrectQuestionCount(IList<Question> questions, int expectedResult)
         {
             QuestionnaireEvaluator questionnaireEvaluator = CreateQuestionnaireEvaluator();
@@ -107,7 +60,7 @@ namespace Questionnaire.Tests.Data
 
             questionnaireEvaluator.UpdateQuestion(question, "Ant");
 
-            question.Should().BeEquivalentTo(TestData.FirstQuestionWithWrongAnswer);
+            question.Should().BeEquivalentTo(TestData.MultiSelectQuestionWithWrongAnswer);
         }
     }
 }

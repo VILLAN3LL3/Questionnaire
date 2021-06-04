@@ -4,23 +4,30 @@
 <h4 class="mt-4">@Question.QuestionText</h4>
 
 <EditForm Model="this">
-    @if (Question.IsMultiSelect)
+    @switch (Question.Type)
     {
-        @foreach (var option in Question.AnswerOptions)
-        {
-            <InputCheckbox @bind-Value="option.IsSelected"></InputCheckbox> <span class="ml-2">@option.OptionText</span> <br />
-        }
-    }
-    else
-    {
-        <InputRadioGroup @bind-Value="SelectedOption">
-            @foreach (var option in Question.AnswerOptions)
-                {
-                <InputRadio Value="option.OptionText" /> <span class="ml-2">@option.OptionText</span> <br />
-                }
-        </InputRadioGroup>
-    }
+        case QuestionType.MultiSelect:
 
+            @foreach (var option in Question.AnswerOptions)
+            {
+                <InputCheckbox @bind-Value="option.IsSelected"></InputCheckbox> <span class="ml-2">@option.OptionText</span> <br />
+            }
+            break;
+        case QuestionType.SingleSelect:
+            <InputRadioGroup @bind-Value="SelectedOption">
+                @foreach (var option in Question.AnswerOptions)
+                        {
+                    <InputRadio Value="option.OptionText" /> <span class="ml-2">@option.OptionText</span> <br />
+                        }
+            </InputRadioGroup>
+            break;
+        case QuestionType.TextInput:
+            <InputText @bind-Value="SelectedOption" />
+            break;
+        default:
+            <p>This question type is not supported.</p>
+            break;
+    }
 </EditForm>
 
 @code {

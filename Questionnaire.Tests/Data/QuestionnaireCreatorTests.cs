@@ -22,17 +22,27 @@ namespace Questionnaire.Tests.Data
                 "Bee",
                 "*Cat",
                 "*Dog",
-                "?What is the sum of 2+3",
-                "2",
-                "*5",
-                "6"
+                "?Which Hogwarts House would you be sorted to",
+                "Gryffindor",
+                "Hufflepuff",
+                "Ravenclaw",
+                "*Slytherin",
+                "?What kind of animal is \"Cisco\" in \"Dances with Wolves\"",
+                "*Horse"
             };
-            IList<Question> expectedresult = TestData.Questions.Take(2).ToList();
+            IList<Question> expectedresult = new List<Question>
+            {
+                TestData.MultiSelectQuestion,
+                TestData.SingleSelectQuestion,
+                TestData.TextInputQuestion
+            };
+            IList<QuestionType> expectedTypes = new List<QuestionType> { QuestionType.MultiSelect, QuestionType.SingleSelect, QuestionType.TextInput };
 
             IList<Question> result = questionnaireCreator.CreateQuestionnaire(
                 textLines);
 
             result.Should().BeEquivalentTo(expectedresult, opt => opt.WithStrictOrdering());
+            result.Select(r => r.Type).Should().BeEquivalentTo(expectedTypes, opt => opt.WithStrictOrdering());
         }
     }
 }

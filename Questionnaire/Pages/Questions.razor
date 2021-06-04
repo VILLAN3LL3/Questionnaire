@@ -5,7 +5,7 @@
 @inject NavigationManager UriHelper
 
 <div class="container-fluid">
-    <div class="card p-3 m-auto" style="max-width: 500px">
+    <div class="card p-3 m-auto">
         @if (!_submitted)
         {
             <h1>Questionnaire</h1>
@@ -22,7 +22,7 @@
                         <QuestionForm Question="@question"></QuestionForm>
                     }
                 </div>
-                <button class="btn btn-primary mt-4" @onclick="Submit">Show my score...</button>
+                <button class="btn btn-primary mt-4" @onclick="Submit" type="submit">Show my score...</button>
             }
         }
         else
