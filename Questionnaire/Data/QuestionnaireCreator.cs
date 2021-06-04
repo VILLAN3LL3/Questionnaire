@@ -13,6 +13,7 @@ namespace Questionnaire.Data
             {
                 if (IsQuestion(line))
                 {
+                    AddDontKnowAnswerOption(currentQuestion);
                     currentQuestion = new Question { QuestionText = CreateQuestionText(line) };
                     listToReturn.Add(currentQuestion);
                 }
@@ -21,8 +22,10 @@ namespace Questionnaire.Data
                     currentQuestion?.AnswerOptions.Add(CreateAnswerOption(line));
                 }
             }
+            AddDontKnowAnswerOption(currentQuestion);
             return listToReturn;
         }
+
         private bool IsQuestion(string line) => line.StartsWith('?');
 
         private string CreateQuestionText(string line) => line.Split('?')[1] + '?';
@@ -33,6 +36,11 @@ namespace Questionnaire.Data
             return splittedLine.Length == 2
                 ? new AnswerOption { IsCorrectAnswer = true, OptionText = splittedLine[1] }
                 : new AnswerOption { OptionText = splittedLine[0] };
+        }
+
+        private void AddDontKnowAnswerOption(Question question)
+        {
+            question?.AnswerOptions.Add(CreateAnswerOption("Don't know"));
         }
     }
 }

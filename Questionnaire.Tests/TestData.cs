@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Questionnaire.Data;
 
 namespace Questionnaire.Tests
@@ -16,7 +15,8 @@ namespace Questionnaire.Tests
                     {
                         new AnswerOption { OptionText = "2" },
                         new AnswerOption { OptionText = "5", IsCorrectAnswer = true },
-                        new AnswerOption { OptionText = "6" }
+                        new AnswerOption { OptionText = "6" },
+                        new AnswerOption { OptionText = "Don't know" }
                     }
                 },
                 new Question
@@ -26,7 +26,8 @@ namespace Questionnaire.Tests
                     {
                         new AnswerOption { OptionText = "42", IsCorrectAnswer = true },
                         new AnswerOption { OptionText = "Are you kiddin' me?" },
-                        new AnswerOption { OptionText = "There is no such an answer"}
+                        new AnswerOption { OptionText = "There is no such an answer"},
+                        new AnswerOption { OptionText = "Don't know" }
                     }
                 },
                 LastQuestion
@@ -41,6 +42,7 @@ namespace Questionnaire.Tests
                         new AnswerOption { OptionText = "Bee" },
                         new AnswerOption { OptionText = "Cat", IsCorrectAnswer = true },
                         new AnswerOption { OptionText = "Dog", IsCorrectAnswer = true },
+                        new AnswerOption { OptionText = "Don't know" }
                     }
         };
 
@@ -52,7 +54,8 @@ namespace Questionnaire.Tests
                         new AnswerOption { OptionText = "Gryffindor", IsCorrectAnswer = false },
                         new AnswerOption { OptionText = "Hufflepuff", IsCorrectAnswer = false },
                         new AnswerOption { OptionText = "Ravenclaw", IsCorrectAnswer = false },
-                        new AnswerOption { OptionText = "Slytherin", IsCorrectAnswer = true }
+                        new AnswerOption { OptionText = "Slytherin", IsCorrectAnswer = true },
+                        new AnswerOption { OptionText = "Don't know" }
                     }
         };
 
@@ -103,7 +106,7 @@ namespace Questionnaire.Tests
             get
             {
                 Question lastQuestion = LastQuestion;
-                lastQuestion.AnswerOptions.Last().IsSelected = true;
+                lastQuestion.AnswerOptions[3].IsSelected = true;
                 return lastQuestion;
             }
         }
