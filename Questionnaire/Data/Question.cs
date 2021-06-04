@@ -29,8 +29,10 @@ namespace Questionnaire.Data
         {
             get
             {
-                return IsOptional || AnswerOptions.Any(o => o.IsSelected);
+                return IsOptional || IsCompleted;
             }
         }
+
+        public bool IsCompleted => AnswerOptions.Any(o => o.IsSelected);
     }
 }

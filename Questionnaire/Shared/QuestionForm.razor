@@ -5,7 +5,7 @@
     @(Question.QuestionText)@if (!Question.IsOptional)
     {<span>*</span>}
 </h4>
-
+<p>@Question.IsValid</p>
 <EditForm Model="this">
     @switch (Question.Type)
     {
@@ -13,7 +13,7 @@
 
             @foreach (var option in Question.AnswerOptions)
             {
-                <InputCheckbox @bind-Value="option.IsSelected"></InputCheckbox> <span class="ml-2">@option.OptionText</span> <br />
+                <input type="checkbox" value="option.IsSelected" @onchange="@((ChangeEventArgs c) => OnCheckboxSelectionChange(c, option))" /> <span class="ml-2">@option.OptionText</span> <br />
             }
             break;
         case QuestionType.SingleSelect:
@@ -51,9 +51,20 @@
         }
     }
 
+    private void OnCheckboxSelectionChange(ChangeEventArgs args, AnswerOption option)
+    {
+        option.IsSelected = (bool)args.Value;
+        ChangeState();
+    }
+
     private void OnSelectionChanged(string value)
     {
         Interactor.UpdateQuestion(Question, value);
+        ChangeState();
+    }
+
+    private void ChangeState()
+    {
         this.StateHasChanged();
         OnStateChangeEvent.InvokeAsync(true);
     }

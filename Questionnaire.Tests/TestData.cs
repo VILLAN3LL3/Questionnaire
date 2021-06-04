@@ -79,6 +79,16 @@ namespace Questionnaire.Tests
             }
         };
 
+        public static Question OptionalQuestionWithWrongAnswer
+        {
+            get
+            {
+                Question question = OptionalQuestion;
+                question.AnswerOptions[0].IsSelected = true;
+                return question;
+            }
+        }
+
         public static Question MultiSelectQuestionWithWrongAnswer
         {
             get
@@ -238,7 +248,19 @@ namespace Questionnaire.Tests
                 yield return new TestCaseData(new List<Question> { MultiSelectQuestionWithCorrectAnswer }, true);
                 yield return new TestCaseData(new List<Question> { TextInputQuestionWithWrongAnswer, MultiSelectQuestion }, false);
                 yield return new TestCaseData(new List<Question> { TextInputQuestionWithWrongAnswer, MultiSelectQuestionWithCorrectAnswer }, true);
+            }
+        }
 
+        public static IEnumerable<TestCaseData> QuestionCompletionTestData
+        {
+            get
+            {
+                yield return new TestCaseData(new List<Question> { OptionalQuestion, TextInputQuestion, MultiSelectQuestion }, false, 0);
+                yield return new TestCaseData(new List<Question> { OptionalQuestion, TextInputQuestion, MultiSelectQuestion }, true, 0);
+                yield return new TestCaseData(new List<Question> { OptionalQuestionWithWrongAnswer, TextInputQuestion, MultiSelectQuestion }, false, 0);
+                yield return new TestCaseData(new List<Question> { OptionalQuestionWithWrongAnswer, TextInputQuestion, MultiSelectQuestion }, true, 33);
+                yield return new TestCaseData(new List<Question> { OptionalQuestionWithWrongAnswer, TextInputQuestionWithCorrectAnswer, MultiSelectQuestion }, false, 50);
+                yield return new TestCaseData(new List<Question> { OptionalQuestionWithWrongAnswer, TextInputQuestionWithWrongAnswer, MultiSelectQuestion }, true, 66);
             }
         }
     }

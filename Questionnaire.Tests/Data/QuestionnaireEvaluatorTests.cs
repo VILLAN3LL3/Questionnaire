@@ -73,5 +73,16 @@ namespace Questionnaire.Tests.Data
 
             result.Should().Be(expectedResult);
         }
+
+        [Test]
+        [TestCaseSource(typeof(TestData), nameof(TestData.QuestionCompletionTestData))]
+        public void Should_Calculate_Completed_Question_Count(IList<Question> questions, bool includeOptional, int expectedResult)
+        {
+            QuestionnaireEvaluator questionnaireEvaluator = CreateQuestionnaireEvaluator();
+
+            var result = questionnaireEvaluator.GetCompletedQuestionPercentage(questions, includeOptional);
+
+            result.Should().Be(expectedResult);
+        }
     }
 }

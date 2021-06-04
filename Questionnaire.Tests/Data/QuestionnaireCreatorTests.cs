@@ -12,7 +12,7 @@ namespace Questionnaire.Tests.Data
         private QuestionnaireCreator CreateQuestionnaireCreator() => new();
 
         [Test]
-        public void CreateQuestionnaire_StateUnderTest_ExpectedBehavior()
+        public void Should_CreateQuestionnaire()
         {
             QuestionnaireCreator questionnaireCreator = CreateQuestionnaireCreator();
             string[] textLines = new string[]

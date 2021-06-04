@@ -8,8 +8,27 @@
     <div class="card p-3 m-auto">
         @if (!_submitted)
         {
-            <h1>Questionnaire</h1>
-            <small class="text-muted">Required questions are marked with an asterisk (*)</small>
+
+            <div class="row align-items-lg-center">
+                <div class="col-12 col-lg-4">
+                    <h1>Questionnaire</h1>
+                    <small class="text-muted mb-4">Required questions are marked with an asterisk (*)</small>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <h4>
+                        Completed
+                    </h4>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: @(_completedQuestionPercentage)%;" aria-valuenow="@(_completedQuestionPercentage)" aria-valuemin="0" aria-valuemax="100"> @(_completedQuestionPercentage)%</div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <h4>Completed including optional questions</h4>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: @(_completedQuestionPercentageIncludingOptional)%;" aria-valuenow="@(_completedQuestionPercentageIncludingOptional)" aria-valuemin="0" aria-valuemax="100"> @(_completedQuestionPercentageIncludingOptional)%</div>
+                    </div>
+                </div>
+            </div>
 
             @if (_questions == null)
             {
@@ -23,7 +42,7 @@
                         <QuestionForm Question="@question" OnStateChangeEvent="Rerender"></QuestionForm>
                     }
                 </div>
-                <button class="btn btn-primary mt-4" @onclick="Submit" type="submit" disabled="@IsQuestionnaireInvalid()">Show my score...</button>
+                <button class="btn btn-primary mt-4" @onclick="Submit" type="submit" disabled="@_isQuestionnaireInvalid">Show my score...</button>
             }
         }
         else
@@ -54,6 +73,9 @@
     private int _correctQuestionCount = 0;
     private int _correctQuestionPercentage = 0;
     private bool _showDialog = true;
+    private int _completedQuestionPercentage = 0;
+    private int _completedQuestionPercentageIncludingOptional = 0;
+    private bool _isQuestionnaireInvalid = true;
 
     private string GetAlertClass()
     {
@@ -76,13 +98,15 @@
     {
         _showDialog = false;
         _questions = Interactor.GetQuestions(selectedQuestionnaire);
+        _isQuestionnaireInvalid = !Interactor.AreAllRequiredQuestionsAnswered(_questions);
         return Task.CompletedTask;
     }
 
-    private bool IsQuestionnaireInvalid() => !Interactor.AreAllRequiredQuestionsAnswered(_questions);
-
     private void Rerender(bool hasChanged)
     {
+        _completedQuestionPercentage = Interactor.GetCompletedQuestionPercentage(_questions, false);
+        _completedQuestionPercentageIncludingOptional = Interactor.GetCompletedQuestionPercentage(_questions, true);
+        _isQuestionnaireInvalid = !Interactor.AreAllRequiredQuestionsAnswered(_questions);
         this.StateHasChanged();
     }
 }

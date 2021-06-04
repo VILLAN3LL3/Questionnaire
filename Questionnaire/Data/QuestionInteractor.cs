@@ -31,5 +31,7 @@ namespace Questionnaire.Data
         public IEnumerable<string> GetQuestionnaires(string path) => _fileProvider.GetQuestionnaires(path);
 
         public bool AreAllRequiredQuestionsAnswered(IList<Question> questions) => _questionnaireEvaluator.AreAllRequiredQuestionsAnswered(questions);
+
+        public int GetCompletedQuestionPercentage(IList<Question> questions, bool includeOptional) => _questionnaireEvaluator.GetCompletedQuestionPercentage(questions, includeOptional);
     }
 }
