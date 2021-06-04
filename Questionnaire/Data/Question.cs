@@ -7,6 +7,7 @@ namespace Questionnaire.Data
     {
         public IList<AnswerOption> AnswerOptions { get; set; } = new List<AnswerOption>();
         public string QuestionText { get; set; }
+        public bool IsOptional { get; set; }
 
         public QuestionType Type
         {
@@ -21,6 +22,14 @@ namespace Questionnaire.Data
                     return QuestionType.MultiSelect;
                 }
                 return QuestionType.SingleSelect;
+            }
+        }
+
+        public bool IsValid
+        {
+            get
+            {
+                return IsOptional || AnswerOptions.Any(o => o.IsSelected);
             }
         }
     }

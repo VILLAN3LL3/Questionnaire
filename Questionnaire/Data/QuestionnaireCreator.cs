@@ -14,7 +14,7 @@ namespace Questionnaire.Data
                 if (IsQuestion(line))
                 {
                     AddDontKnowAnswerOption(currentQuestion);
-                    currentQuestion = new Question { QuestionText = CreateQuestionText(line) };
+                    currentQuestion = new Question { IsOptional = IsOptionalQuestion(line), QuestionText = CreateQuestionText(line) };
                     listToReturn.Add(currentQuestion);
                 }
                 else
@@ -27,8 +27,9 @@ namespace Questionnaire.Data
         }
 
         private bool IsQuestion(string line) => line.StartsWith('?');
+        private bool IsOptionalQuestion(string line) => line.StartsWith("??");
 
-        private string CreateQuestionText(string line) => line.Split('?')[1] + '?';
+        private string CreateQuestionText(string line) => line.TrimStart('?') + '?';
 
         private AnswerOption CreateAnswerOption(string line)
         {

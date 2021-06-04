@@ -29,5 +29,7 @@ namespace Questionnaire.Data
         public int GetCorrectQuestionPercentage(int correctQuestionCount, int questionCount) => _questionnaireEvaluator.GetCorrectQuestionPercentage(correctQuestionCount, questionCount);
 
         public IEnumerable<string> GetQuestionnaires(string path) => _fileProvider.GetQuestionnaires(path);
+
+        public bool AreAllRequiredQuestionsAnswered(IList<Question> questions) => _questionnaireEvaluator.AreAllRequiredQuestionsAnswered(questions);
     }
 }

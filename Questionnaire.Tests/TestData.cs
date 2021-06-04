@@ -9,17 +9,7 @@ namespace Questionnaire.Tests
         public static IList<Question> Questions => new List<Question>
             {
                 MultiSelectQuestion,
-                new Question
-                {
-                    QuestionText = "What is the sum of 2+3?",
-                    AnswerOptions = new List<AnswerOption>
-                    {
-                        new AnswerOption { OptionText = "2" },
-                        new AnswerOption { OptionText = "5", IsCorrectAnswer = true },
-                        new AnswerOption { OptionText = "6" },
-                        new AnswerOption { OptionText = "Don't know" }
-                    }
-                },
+                OptionalQuestion,
                 new Question
                 {
                     QuestionText = "What is the answer to the ultimate question of life, the universe and everything?",
@@ -34,6 +24,25 @@ namespace Questionnaire.Tests
                 SingleSelectQuestion,
                 TextInputQuestion
             };
+
+        public static Question OptionalQuestion
+        {
+            get
+            {
+                return new Question
+                {
+                    QuestionText = "What is the sum of 2+3?",
+                    AnswerOptions = new List<AnswerOption>
+                    {
+                        new AnswerOption { OptionText = "2" },
+                        new AnswerOption { OptionText = "5", IsCorrectAnswer = true },
+                        new AnswerOption { OptionText = "6" },
+                        new AnswerOption { OptionText = "Don't know" }
+                    },
+                    IsOptional = true
+                };
+            }
+        }
 
         public static Question MultiSelectQuestion => new()
         {
@@ -214,6 +223,22 @@ namespace Questionnaire.Tests
                 yield return new TestCaseData(new List<Question> { MultiSelectQuestionWithWrongAnswer, SingleSelectQuestionWithCorrectAnswer }, 1);
                 yield return new TestCaseData(null, 0);
                 yield return new TestCaseData(new List<Question>(), 0);
+            }
+        }
+
+        public static IEnumerable<TestCaseData> ValidationTestData
+        {
+            get
+            {
+                yield return new TestCaseData(new List<Question> { OptionalQuestion }, true);
+                yield return new TestCaseData(new List<Question> { TextInputQuestion }, false);
+                yield return new TestCaseData(new List<Question> { MultiSelectQuestion }, false);
+                yield return new TestCaseData(new List<Question> { SingleSelectQuestion }, false);
+                yield return new TestCaseData(new List<Question> { SingleSelectQuestionWithWrongAnswer }, true);
+                yield return new TestCaseData(new List<Question> { MultiSelectQuestionWithCorrectAnswer }, true);
+                yield return new TestCaseData(new List<Question> { TextInputQuestionWithWrongAnswer, MultiSelectQuestion }, false);
+                yield return new TestCaseData(new List<Question> { TextInputQuestionWithWrongAnswer, MultiSelectQuestionWithCorrectAnswer }, true);
+
             }
         }
     }

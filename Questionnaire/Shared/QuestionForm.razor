@@ -1,7 +1,10 @@
 ﻿@using Questionnaire.Data
 @inject QuestionInteractor Interactor
 
-<h4 class="mt-4">@Question.QuestionText</h4>
+<h4 class="mt-4">
+    @(Question.QuestionText)@if (!Question.IsOptional)
+    {<span>*</span>}
+</h4>
 
 <EditForm Model="this">
     @switch (Question.Type)
@@ -34,6 +37,9 @@
     [Parameter]
     public Question Question { get; set; }
 
+    [Parameter]
+    public EventCallback<bool> OnStateChangeEvent { get; set; }
+
     private string _selectedOption;
     public string SelectedOption
     {
@@ -48,5 +54,7 @@
     private void OnSelectionChanged(string value)
     {
         Interactor.UpdateQuestion(Question, value);
+        this.StateHasChanged();
+        OnStateChangeEvent.InvokeAsync(true);
     }
 }

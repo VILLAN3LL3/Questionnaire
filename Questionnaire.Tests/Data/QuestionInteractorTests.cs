@@ -41,8 +41,6 @@ namespace Questionnaire.Tests.Data
             result.Should().BeEquivalentTo(expectedResult);
         }
 
-
-
         [Test]
         [TestCaseSource(typeof(TestData), nameof(TestData.QuestionCountTestData))]
         public void Should_GetCorrectQuestionCount(IList<Question> questions, int expectedResult)
@@ -93,6 +91,17 @@ namespace Questionnaire.Tests.Data
 
             result.Count().Should().Be(3);
             result.Last().Should().EndWith("testquestionnaire.txt");
+        }
+
+        [Test]
+        [TestCaseSource(typeof(TestData), nameof(TestData.ValidationTestData))]
+        public void Should_Check_If_Questionnaire_Is_Valid(IList<Question> questions, bool expectedResult)
+        {
+            QuestionInteractor questionInteractor = CreateQuestionInteractor();
+
+            var result = questionInteractor.AreAllRequiredQuestionsAnswered(questions);
+
+            result.Should().Be(expectedResult);
         }
     }
 }

@@ -39,5 +39,7 @@ namespace Questionnaire.Data
         public int GetCorrectQuestionCount(IList<Question> questions) => questions?.Count(q => q.AnswerOptions.Where(o => o.IsCorrectAnswer).All(o => o.IsSelected)) ?? 0;
 
         public int GetCorrectQuestionPercentage(int correctQuestionCount, int questionCount) => questionCount == 0 ? 0 : Math.Min((correctQuestionCount * 100 / questionCount * 100) / 100, 100);
+
+        public bool AreAllRequiredQuestionsAnswered(IList<Question> questions) => questions.All(q => q.IsValid);
     }
 }

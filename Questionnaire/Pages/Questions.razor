@@ -9,6 +9,7 @@
         @if (!_submitted)
         {
             <h1>Questionnaire</h1>
+            <small class="text-muted">Required questions are marked with an asterisk (*)</small>
 
             @if (_questions == null)
             {
@@ -19,10 +20,10 @@
                 <div style="height: 70vh; overflow-y: scroll;">
                     @foreach (var question in _questions)
                     {
-                        <QuestionForm Question="@question"></QuestionForm>
+                        <QuestionForm Question="@question" OnStateChangeEvent="Rerender"></QuestionForm>
                     }
                 </div>
-                <button class="btn btn-primary mt-4" @onclick="Submit" type="submit">Show my score...</button>
+                <button class="btn btn-primary mt-4" @onclick="Submit" type="submit" disabled="@IsQuestionnaireInvalid()">Show my score...</button>
             }
         }
         else
@@ -76,5 +77,12 @@
         _showDialog = false;
         _questions = Interactor.GetQuestions(selectedQuestionnaire);
         return Task.CompletedTask;
+    }
+
+    private bool IsQuestionnaireInvalid() => !Interactor.AreAllRequiredQuestionsAnswered(_questions);
+
+    private void Rerender(bool hasChanged)
+    {
+        this.StateHasChanged();
     }
 }

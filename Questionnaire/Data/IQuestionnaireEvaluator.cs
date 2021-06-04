@@ -8,5 +8,6 @@ namespace Questionnaire.Data
         int GetCorrectQuestionCount(IList<Question> questions);
         int GetCorrectQuestionPercentage(int correctQuestionCount, int questionCount);
         void UpdateQuestion(Question question, string selectedValue);
+        bool AreAllRequiredQuestionsAnswered(IList<Question> questions);
     }
 }

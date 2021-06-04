@@ -62,5 +62,16 @@ namespace Questionnaire.Tests.Data
 
             question.Should().BeEquivalentTo(TestData.MultiSelectQuestionWithWrongAnswer);
         }
+
+        [Test]
+        [TestCaseSource(typeof(TestData), nameof(TestData.ValidationTestData))]
+        public void Should_Check_If_Questionnaire_Is_Valid(IList<Question> questions, bool expectedResult)
+        {
+            QuestionnaireEvaluator questionnaireEvaluator = CreateQuestionnaireEvaluator();
+
+            var result = questionnaireEvaluator.AreAllRequiredQuestionsAnswered(questions);
+
+            result.Should().Be(expectedResult);
+        }
     }
 }
