@@ -8,5 +8,9 @@ namespace Questionnaire.Data
         public string[] ReadFile(string path) => File.ReadAllLines(path);
 
         public IEnumerable<string> GetQuestionnaires(string path) => Directory.EnumerateFiles(path, "*.txt");
+
+        public void CreateOrUpdateFile(string path, IEnumerable<string> newLines) => File.AppendAllLines(path, newLines);
+
+        public bool DoesFileExist(string path) => File.Exists(path);
     }
 }

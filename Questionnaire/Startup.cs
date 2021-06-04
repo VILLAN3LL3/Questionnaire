@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Questionnaire.Csv;
 using Questionnaire.Data;
 
 namespace Questionnaire
@@ -23,6 +24,8 @@ namespace Questionnaire
             services.AddSingleton<IFileProvider, FileProvider>();
             services.AddSingleton<IQuestionnaireCreator, QuestionnaireCreator>();
             services.AddSingleton<IQuestionnaireEvaluator, QuestionnaireEvaluator>();
+            services.AddSingleton<ICsvMapper, CsvMapper>();
+            services.AddSingleton<ICsvSerializer, CsvSerializer>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

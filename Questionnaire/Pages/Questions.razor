@@ -3,6 +3,7 @@
 @using Questionnaire.Data
 @inject QuestionInteractor Interactor
 @inject NavigationManager UriHelper
+@inject IJSRuntime JsRuntime
 
 <div class="container-fluid">
     <div class="card p-3 m-auto">
@@ -57,6 +58,7 @@
                     <QuestionEvaluation Question="@question"></QuestionEvaluation>
                 }
             </div>
+            <button class="btn btn-primary mt-4" @onclick="Export" type="button">Export CSV</button>
         }
 
     </div>
@@ -92,6 +94,13 @@
         _submitted = true;
         _correctQuestionCount = Interactor.GetCorrectQuestionCount(_questions);
         _correctQuestionPercentage = Interactor.GetCorrectQuestionPercentage(_correctQuestionCount, _questions.Count);
+    }
+
+    private async Task Export()
+    {
+        Interactor.ExportCsv(_questions, "score.csv");
+        await JsRuntime.InvokeVoidAsync("alert", "Data successfully exported to 'score.csv'");
+        UriHelper.NavigateTo(UriHelper.Uri, forceLoad: true);
     }
 
     private Task OnDialogClose(string selectedQuestionnaire)
