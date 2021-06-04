@@ -60,7 +60,12 @@ namespace Questionnaire.Data
                     nexNo = lastNo + 1;
                 }
             }
-            IList<QuestionCsv> csvObjects = _csvMapper.Map(questions, nexNo);
+
+            IList<QuestionCsv> csvObjects = new List<QuestionCsv>();
+            foreach (var question in questions)
+            {
+                csvObjects.Add(_csvMapper.Map(question, _questionnaireEvaluator.EvaluateQuestion(question), nexNo));
+            }
             IList<string> serializedObjects = _csvSerializer.SerializeToCsvFile(csvObjects, addHeader);
             _fileProvider.CreateOrUpdateFile(path, serializedObjects);
         }

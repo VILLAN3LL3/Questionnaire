@@ -2,6 +2,7 @@
 using System.Linq;
 using FluentAssertions;
 using NUnit.Framework;
+using Questionnaire.Csv;
 using Questionnaire.Data;
 
 namespace Questionnaire.Tests.Data
@@ -12,7 +13,9 @@ namespace Questionnaire.Tests.Data
         private QuestionInteractor CreateQuestionInteractor() => new(
                 new FileProvider(),
                 new QuestionnaireCreator(),
-                new QuestionnaireEvaluator()
+                new QuestionnaireEvaluator(),
+                new CsvMapper(),
+                new CsvSerializer()
             );
 
         [Test]
