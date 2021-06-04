@@ -29,10 +29,17 @@ namespace Questionnaire.Data
         private bool IsQuestion(string line) => line.StartsWith('?');
         private bool IsOptionalQuestion(string line) => line.StartsWith("??");
 
+        private bool IsInputOption(string line) => line.StartsWith(":");
+
         private string CreateQuestionText(string line) => line.TrimStart('?') + '?';
 
         private AnswerOption CreateAnswerOption(string line)
         {
+            if (IsInputOption(line))
+            {
+                line = line.TrimStart(':');
+                return new AnswerOption { OptionText = line, IsCorrectAnswer = true, IsInputOption = true };
+            }
             string[] splittedLine = line.Split('*');
             return splittedLine.Length == 2
                 ? new AnswerOption { IsCorrectAnswer = true, OptionText = splittedLine[1] }

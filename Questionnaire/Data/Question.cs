@@ -13,7 +13,7 @@ namespace Questionnaire.Data
         {
             get
             {
-                if (AnswerOptions.Count == 1)
+                if (AnswerOptions.Any(o => o.IsInputOption))
                 {
                     return QuestionType.TextInput;
                 }

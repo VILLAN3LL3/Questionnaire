@@ -17,4 +17,4 @@ Hufflepuff
 Ravenclaw
 *Slytherin
 ?What kind of animal is "Cisco" in "Dances with Wolves"
-*Horse
+:Horse

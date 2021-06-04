@@ -9,4 +9,4 @@ Lemon Curd Pie
 *KitKat
 Chocolate Chip Cookie
 ?What kind of animal is "Cisco" in "Dances with Wolves"
-*Horse
+:Horse

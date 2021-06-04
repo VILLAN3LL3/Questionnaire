@@ -27,7 +27,7 @@ namespace Questionnaire.Tests.Data
                 "*5",
                 "6",
                 "?What kind of animal is \"Cisco\" in \"Dances with Wolves\"",
-                "*Horse"
+                ":Horse"
             };
             IList<Question> expectedresult = new List<Question>
             {

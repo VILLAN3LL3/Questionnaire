@@ -75,7 +75,7 @@ namespace Questionnaire.Tests
             QuestionText = "What kind of animal is \"Cisco\" in \"Dances with Wolves\"?",
             AnswerOptions = new List<AnswerOption>
             {
-                new AnswerOption { OptionText = "Horse", IsCorrectAnswer = true }
+                new AnswerOption { OptionText = "Horse", IsCorrectAnswer = true, IsInputOption = true }
             }
         };
 
